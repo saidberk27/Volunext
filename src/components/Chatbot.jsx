@@ -135,6 +135,26 @@ const Chatbot = () => {
                             <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Volunext Asistan</h3>
                             <span style={{ fontSize: '12px', opacity: 0.9 }}>Çevrimiçi</span>
                         </div>
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            style={{
+                                marginLeft: 'auto',
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'white',
+                                cursor: 'pointer',
+                                padding: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '50%',
+                                transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                            <X size={20} />
+                        </button>
                     </div>
 
                     {/* Messages Area */}
