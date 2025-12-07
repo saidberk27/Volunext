@@ -1,7 +1,10 @@
-import React from 'react';
-import { Mail, Phone, MapPin, Award, Droplets, Fish, TreePine, CatIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Award, Droplets, Fish, TreePine, CatIcon, X } from 'lucide-react';
+import certificate from '../assets/certificate.png';
 
 const VolunteerProfile = () => {
+    const [selectedImage, setSelectedImage] = useState(null);
+
     const PAST_EVENTS = [
         {
             id: 1,
@@ -166,6 +169,94 @@ const VolunteerProfile = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Certificates Section */}
+            <div style={{ marginTop: '3rem' }}>
+                <h3 style={{ marginBottom: '1.5rem' }}>Sertifikalarım</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                    <div style={{
+                        background: 'white',
+                        borderRadius: '1rem',
+                        border: '1px solid hsl(var(--border))',
+                        padding: '1rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        transition: 'transform 0.2s',
+                        cursor: 'pointer'
+                    }}
+                        onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+                        onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+                        onClick={() => setSelectedImage(certificate)}
+                    >
+                        <div style={{
+                            width: '100%',
+                            height: '200px',
+                            background: '#f3f4f6',
+                            borderRadius: '0.5rem',
+                            overflow: 'hidden',
+                            border: '1px solid #e5e7eb'
+                        }}>
+                            <img src={certificate} alt="Sertifika" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        </div>
+                        <div>
+                            <h4 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>Üstün Gönüllü Hizmet Belgesi</h4>
+                            <p style={{ fontSize: '0.9rem', color: 'hsl(var(--text-muted))' }}>Gönüllülük Federasyonu • 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Image Modal */}
+            {selectedImage && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 2000,
+                        cursor: 'zoom-out'
+                    }}
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <button
+                        style={{
+                            position: 'absolute',
+                            top: '20px',
+                            right: '20px',
+                            background: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '40px',
+                            height: '40px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            zIndex: 2001
+                        }}
+                    >
+                        <X size={24} color="black" />
+                    </button>
+                    <img
+                        src={selectedImage}
+                        alt="Full Screen Certificate"
+                        style={{
+                            maxWidth: '90%',
+                            maxHeight: '90%',
+                            objectFit: 'contain',
+                            borderRadius: '8px',
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                        }}
+                    />
+                </div>
+            )}
         </div>
     );
 };

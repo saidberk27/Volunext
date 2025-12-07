@@ -28,31 +28,43 @@ const MapPage = () => {
     // Helpers
     const toRad = (degrees) => degrees * (Math.PI / 180);
 
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371;
-        const dLat = toRad(lat2 - lat1);
-        const dLon = toRad(lon2 - lon1);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    };
+    const formatDateTime = (dateStr) => {
+        if (!dateStr) return '';
+        // If it's a Firestore Timestamp (legacy data), convert to date then string
+        if (dateStr?.toDate) {
+            const d = dateStr.toDate();
+            return d.toLocaleString('tr-TR', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
 
-    const formatDateTime = (date) => {
-        if (!date) return '';
-        // Handle Firestore Timestamp or Date object
-        const d = date.toDate ? date.toDate() : new Date(date);
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-        return d.toLocaleString('tr-TR', options);
+        // If it's already a string like "2024-12-07T14:30"
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr; // Fallback if parsing fails
+
+        return date.toLocaleString('tr-TR', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
+        });
     };
 
     const getProjectStatus = (project) => {
         const now = new Date();
-        // Handle Firestore Timestamp
-        const startDate = project.startDate && project.startDate.toDate ? project.startDate.toDate() : new Date(project.startDate);
+        let startDate;
 
-        const endDate = new Date(startDate.getTime() + 8 * 3600000);
+        // Handle Firestore Timestamp or String
+        if (project.startDate?.toDate) {
+            startDate = project.startDate.toDate();
+        } else {
+            startDate = new Date(project.startDate);
+        }
+
+        if (isNaN(startDate.getTime())) {
+            return { status: 'waiting', color: Cesium.Color.YELLOW, text: 'Tarih Bekleniyor', textColor: '#ffaa00' };
+        }
+
+        const endDate = new Date(startDate.getTime() + 8 * 3600000); // 8 hours duration
         const fifteenMinutesAfter = new Date(endDate.getTime() + 15 * 60000);
 
         if (now < startDate) return { status: 'waiting', color: Cesium.Color.YELLOW, text: 'Başlamadı ⏳', textColor: '#ffaa00' };
@@ -449,18 +461,18 @@ const MapPage = () => {
         if (!modal.location) return;
 
         const projectName = formData.get('projectName');
-        const startTimeStr = formData.get('startTime');
+        const startTimeStr = formData.get('startTime'); // "2024-12-07T14:30"
         const participants = parseInt(formData.get('participants'));
 
         try {
             const newProjectData = {
                 name: projectName,
-                startDate: new Date(startTimeStr), // Store as Date, Firestore will convert or we can use Timestamp.fromDate(new Date(startTimeStr))
+                startDate: startTimeStr, // Saving as string per user request
                 participants: participants,
                 latitude: modal.location.latitude,
                 longitude: modal.location.longitude,
                 status: 'waiting',
-                createdAt: Timestamp.now()
+                createdAt: new Date().toISOString() // Saving formatted string for consistency
             };
 
             const docRef = await addDoc(collection(db, "events"), newProjectData);
@@ -506,7 +518,7 @@ const MapPage = () => {
                         </div>
                         <div className="telemetry-item">
                             <span className="telemetry-label">Başlangıç</span>
-                            <span className="telemetry-value">{formatDateTime(new Date(selectedProject.startDate))}</span>
+                            <span className="telemetry-value">{formatDateTime(selectedProject.startDate)}</span>
                         </div>
                         <div className="telemetry-item">
                             <span className="telemetry-label">Durum</span>
