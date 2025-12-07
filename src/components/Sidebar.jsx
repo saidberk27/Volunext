@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Map as MapIcon, User, Trophy, Cpu, X } from 'lucide-react';
+import { Home, Map as MapIcon, User, Trophy, Cpu, X, Award } from 'lucide-react';
 
 const getLinkStyle = (name) => ({ isActive }) => {
     return ({
@@ -84,6 +84,11 @@ const Sidebar = ({ isOpen, onClose, isDesktop }) => {
                 <NavLink to="/app/algorithms" style={getLinkStyle('Algoritmalarımız')} onClick={!isDesktop ? onClose : undefined}>
                     <Cpu size={22} />
                     <span>Algoritmalarımız</span>
+                </NavLink>
+
+                <NavLink to="/app/supporters" style={getLinkStyle('Destekçiler')} onClick={!isDesktop ? onClose : undefined}>
+                    <Award size={22} />
+                    <span>En Çok Destek Verenler</span>
                 </NavLink>
             </aside>
 

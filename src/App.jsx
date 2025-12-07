@@ -6,6 +6,7 @@ import ProfilePage from './pages/ProfilePage';
 import MapPage from './pages/MapPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import AlgorithmsPage from './pages/AlgorithmsPage';
+import TopSupportersPage from './pages/TopSupportersPage';
 import Layout from './components/Layout';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="map" element={<MapPage />} />
           <Route path="leaderboard" element={<LeaderboardPage />} />
           <Route path="algorithms" element={<AlgorithmsPage />} />
+          <Route path="supporters" element={<TopSupportersPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
