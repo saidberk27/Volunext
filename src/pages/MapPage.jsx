@@ -6,39 +6,13 @@ import './MapPage.css';
 // Cesium Ion Token
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YTRiZjBlOC1hN2FkLTQyNTktOTk1ZS02MWVhZDQyYjUzOWEiLCJpZCI6MzQxNjE4LCJpYXQiOjE3NTc5ODE3MTF9.VJIXDbz8LVzRzK3AVc5DYvbRxohwJuXo77sMexeCuP0';
 
-const sampleProjects = [
-    {
-        id: 1,
-        name: "Orman Temizliği",
-        latitude: 41.0082,
-        longitude: 28.9784,
-        participants: 15,
-        startDate: new Date('2024-12-06T14:00:00'),
-        status: 'active'
-    },
-    {
-        id: 2,
-        name: "Sahil Temizliği",
-        latitude: 41.0150,
-        longitude: 28.9850,
-        participants: 8,
-        startDate: new Date('2024-12-06T16:00:00'),
-        status: 'waiting'
-    },
-    {
-        id: 3,
-        name: "Ağaç Dikimi",
-        latitude: 41.0050,
-        longitude: 28.9700,
-        participants: 22,
-        startDate: new Date('2024-12-05T08:00:00'),
-        status: 'completed'
-    }
-];
+import { db } from '../firebase';
+import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
 
 const MapPage = () => {
     const cesiumContainerRef = useRef(null);
     const viewerRef = useRef(null);
+    const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null });
     const [connectionStatus, setConnectionStatus] = useState({ connected: false, message: 'Bağlantı Bekleniyor...' });
@@ -66,13 +40,18 @@ const MapPage = () => {
     };
 
     const formatDateTime = (date) => {
+        if (!date) return '';
+        // Handle Firestore Timestamp or Date object
+        const d = date.toDate ? date.toDate() : new Date(date);
         const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-        return date.toLocaleString('tr-TR', options);
+        return d.toLocaleString('tr-TR', options);
     };
 
     const getProjectStatus = (project) => {
         const now = new Date();
-        const startDate = new Date(project.startDate);
+        // Handle Firestore Timestamp
+        const startDate = project.startDate && project.startDate.toDate ? project.startDate.toDate() : new Date(project.startDate);
+
         const endDate = new Date(startDate.getTime() + 8 * 3600000);
         const fifteenMinutesAfter = new Date(endDate.getTime() + 15 * 60000);
 
@@ -204,8 +183,8 @@ const MapPage = () => {
             }
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-        // Initial Data Load
-        showAllProjects(viewer);
+        // Usage fetch
+        fetchProjects();
 
         return () => {
             if (viewerRef.current) {
@@ -214,6 +193,30 @@ const MapPage = () => {
             }
         };
     }, []);
+
+    const fetchProjects = async () => {
+        try {
+            setConnectionStatus({ connected: false, message: 'Verilen Yükleniyor...' });
+            const querySnapshot = await getDocs(collection(db, "events"));
+            const projectsData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setProjects(projectsData);
+            setConnectionStatus({ connected: true, message: `${projectsData.length} Etkinlik Yüklendi` });
+        } catch (error) {
+            console.error("Error fetching projects: ", error);
+            setConnectionStatus({ connected: false, message: 'Veri Hatası' });
+        }
+    };
+
+    // Update map markers when projects state changes
+    useEffect(() => {
+        if (viewerRef.current && projects.length > 0) {
+            showAllProjects(viewerRef.current, projects);
+        }
+    }, [projects]);
+
 
     // Monitoring Loop
     useEffect(() => {
@@ -276,17 +279,16 @@ const MapPage = () => {
     }, []);
 
     // Add projects Effect (on mount mostly, but generic)
-    const showAllProjects = (viewer) => {
+    const showAllProjects = (viewer, projectsList) => {
         if (!viewer) return;
         viewer.entities.removeAll();
         volunteerProjectsRef.current = [];
 
-        sampleProjects.forEach(project => {
+        projectsList.forEach(project => {
             createProjectMarker(viewer, project);
         });
 
         updateUserMarker(userLocation); // Restore user marker if location known
-        setConnectionStatus({ connected: true, message: `${sampleProjects.length} Etkinlik Yüklendi` });
     };
 
     const createProjectMarker = (viewer, project) => {
@@ -370,17 +372,10 @@ const MapPage = () => {
         const updatedProject = { ...selectedProject, participants: selectedProject.participants + 1 };
         setSelectedProject(updatedProject);
 
-        // Update global sample data (mock)
-        const idx = sampleProjects.findIndex(p => p.id === updatedProject.id);
-        if (idx !== -1) sampleProjects[idx].participants = updatedProject.participants;
+        // Update global state
+        setProjects(prev => prev.map(p => p.id === updatedProject.id ? updatedProject : p));
 
-        // Update existing marker label/data? Marker update loop handles visual status, but data prop needs update if we use it
-        // Ideally we update the entity property
-        const entityPair = volunteerProjectsRef.current.find(p => p.data.id === updatedProject.id);
-        if (entityPair) {
-            entityPair.data.participants = updatedProject.participants;
-            entityPair.entity.properties.projectData = updatedProject;
-        }
+        // Note: Ideally we should update Firestore here too.
 
         setAlert({ show: true, message: `"${updatedProject.name}" etkinliğine başarıyla katıldınız!` });
     };
@@ -447,33 +442,48 @@ const MapPage = () => {
         }
     };
 
-    const handleCreateProjectSubmit = (e) => {
+    const handleCreateProjectSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
 
         if (!modal.location) return;
 
-        const newProject = {
-            id: Date.now(),
-            name: formData.get('projectName'),
-            startDate: new Date(formData.get('startTime')),
-            participants: parseInt(formData.get('participants')),
-            latitude: modal.location.latitude,
-            longitude: modal.location.longitude,
-            status: 'waiting'
-        };
+        const projectName = formData.get('projectName');
+        const startTimeStr = formData.get('startTime');
+        const participants = parseInt(formData.get('participants'));
 
-        sampleProjects.push(newProject);
-        if (viewerRef.current) {
-            createProjectMarker(viewerRef.current, newProject);
-            viewerRef.current.camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(newProject.longitude, newProject.latitude, 5000),
-                duration: 2
-            });
+        try {
+            const newProjectData = {
+                name: projectName,
+                startDate: new Date(startTimeStr), // Store as Date, Firestore will convert or we can use Timestamp.fromDate(new Date(startTimeStr))
+                participants: participants,
+                latitude: modal.location.latitude,
+                longitude: modal.location.longitude,
+                status: 'waiting',
+                createdAt: Timestamp.now()
+            };
+
+            const docRef = await addDoc(collection(db, "events"), newProjectData);
+            console.log("Document written with ID: ", docRef.id);
+
+            // Add to local state immediately for responsiveness
+            const newProjectWithId = { id: docRef.id, ...newProjectData };
+            setProjects(prev => [...prev, newProjectWithId]);
+
+            if (viewerRef.current) {
+                viewerRef.current.camera.flyTo({
+                    destination: Cesium.Cartesian3.fromDegrees(newProjectWithId.longitude, newProjectWithId.latitude, 5000),
+                    duration: 2
+                });
+            }
+
+            setModal({ show: false, location: null });
+            setAlert({ show: true, message: `✅ "${newProjectWithId.name}" etkinliği başarıyla oluşturuldu!` });
+
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            setAlert({ show: true, message: `Hata: ${e.message}` });
         }
-
-        setModal({ show: false, location: null });
-        setAlert({ show: true, message: `✅ "${newProject.name}" etkinliği başarıyla oluşturuldu!` });
     };
 
     return (
