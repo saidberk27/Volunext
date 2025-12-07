@@ -2,6 +2,37 @@ import React from 'react';
 import { Mail, Phone, MapPin, Award, Droplets, Fish, TreePine, CatIcon } from 'lucide-react';
 
 const VolunteerProfile = () => {
+    const PAST_EVENTS = [
+        {
+            id: 1,
+            title: "Sokak Hayvanlarını Besleme",
+            date: "12 Kasım 2024",
+            organization: "Pati Dostları Derneği",
+            image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&q=80&w=500"
+        },
+        {
+            id: 2,
+            title: "Şehir Parkı Temizliği",
+            date: "28 Ekim 2024",
+            organization: "Yeşil Şehir İnisiyatifi",
+            image: "https://akcaabat.bel.tr/uploads/HABERLER/227.jpg?auto=format&fit=crop&q=80&w=500"
+        },
+        {
+            id: 3,
+            title: "Köy Okulu Kütüphane Kurulumu",
+            date: "15 Ekim 2024",
+            organization: "Eğitim Gönüllüleri",
+            image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&q=80&w=500"
+        },
+        {
+            id: 4,
+            title: "Yaşlı Bakımevi Ziyareti",
+            date: "05 Ekim 2024",
+            organization: "Sevgi Eli Derneği",
+            image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&q=80&w=500"
+        }
+    ];
+
     return (
         <div className="card">
             <div style={{
@@ -102,16 +133,35 @@ const VolunteerProfile = () => {
 
             <div style={{ marginTop: '3rem' }}>
                 <h3 style={{ marginBottom: '1.5rem' }}>Katıldığı Projeler</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-                    {[1, 2, 3].map(i => (
-                        <div key={i} style={{
-                            background: 'hsl(var(--bg-dark))',
-                            padding: '1rem',
-                            borderRadius: '0.5rem',
-                            border: '1px solid hsl(var(--border))'
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                    {PAST_EVENTS.map(event => (
+                        <div key={event.id} style={{
+                            background: 'white',
+                            borderRadius: '1rem',
+                            border: '1px solid hsl(var(--border))',
+                            overflow: 'hidden',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                            transition: 'transform 0.2s ease-in-out'
                         }}>
-                            <div style={{ height: '100px', background: 'hsl(var(--border))', borderRadius: '0.25rem', marginBottom: '0.5rem' }}></div>
-                            <p style={{ fontWeight: '600' }}>Şehir Temizliği #{i}</p>
+                            <div style={{ height: '160px', overflow: 'hidden' }}>
+                                <img
+                                    src={event.image}
+                                    alt={event.title}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
+                                    onMouseOver={e => e.target.style.transform = 'scale(1.1)'}
+                                    onMouseOut={e => e.target.style.transform = 'scale(1)'}
+                                />
+                            </div>
+                            <div style={{ padding: '1.25rem' }}>
+                                <div style={{ fontSize: '0.8rem', color: 'hsl(var(--primary))', marginBottom: '0.5rem', fontWeight: '600' }}>
+                                    {event.organization}
+                                </div>
+                                <h4 style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>{event.title}</h4>
+                                <div style={{ fontSize: '0.85rem', color: 'hsl(var(--text-muted))', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }}></span>
+                                    Tamamlandı • {event.date}
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>

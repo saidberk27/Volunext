@@ -477,7 +477,7 @@ const MapPage = () => {
     };
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
+        <div className="map-page-wrapper">
             <div id="cesiumContainer" ref={cesiumContainerRef} />
 
             {/* Details Panel */}

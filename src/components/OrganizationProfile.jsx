@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Globe, Users, Calendar, ArrowRight, Leaf, Moon, MoonStarIcon, CatIcon } from 'lucide-react';
+import iyaca from '../assets/iyaca.jpg'
 
 const OrganizationProfile = () => {
     const events = [
@@ -46,7 +47,7 @@ const OrganizationProfile = () => {
                 flexWrap: 'wrap'
             }}>
                 <img
-                    src="/src/assets/iyaca.jpg"
+                    src={iyaca}
                     alt="IYACA Logo"
                     style={{ width: '120px', height: '120px', borderRadius: '1rem', objectFit: 'cover', border: '1px solid hsl(var(--border))' }}
                 />

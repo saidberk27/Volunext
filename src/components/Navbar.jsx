@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bell, BellPlusIcon, LucideBellDot, MessageSquare, MessageSquareDotIcon, User, Menu } from 'lucide-react';
+import sideLogo from '../assets/side-logo.png'
 
 const Navbar = ({ onMenuClick }) => {
     return (
@@ -29,7 +30,7 @@ const Navbar = ({ onMenuClick }) => {
                 }}>
                     <a href="/app/home">
                         <img
-                            src="/src/assets/side-logo.png"
+                            src={sideLogo}
                             alt="Kuruluş Resim"
                             style={{
                                 width: '240px',

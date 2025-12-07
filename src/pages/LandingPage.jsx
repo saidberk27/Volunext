@@ -1,7 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-
+import logo from '../assets/logo.png'
+import volunteer from '../assets/volunteer.png'
+import foundation from '../assets/foundation.png'
 const LandingPage = () => {
     const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ const LandingPage = () => {
             <div className="container" style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '1rem' }} className="text-gradient">
                     <img
-                        src="/src/assets/logo.png"
+                        src={logo}
                         alt="Kuruluş Resim"
                         style={{
                             width: '240px',
@@ -70,7 +72,7 @@ const LandingPage = () => {
                 >
                     {/* User requested image here */}
                     <img
-                        src="/src/assets/volunteer.png"
+                        src={volunteer}
                         alt="Gönüllü Resim"
                         style={{
                             width: '80px',
@@ -118,7 +120,7 @@ const LandingPage = () => {
                     }}
                 >
                     <img
-                        src="/src/assets/foundation.png"
+                        src={foundation}
                         alt="Kuruluş Resim"
                         style={{
                             width: '80px',

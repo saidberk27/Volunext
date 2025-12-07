@@ -110,22 +110,7 @@ const Chatbot = () => {
 
             {/* Chat Popup */}
             {isOpen && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '100px',
-                    right: '30px',
-                    width: '380px',
-                    height: '500px',
-                    backgroundColor: 'white',
-                    borderRadius: '16px',
-                    boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    zIndex: 1000,
-                    overflow: 'hidden',
-                    border: '1px solid hsl(0 0% 90%)',
-                    animation: 'fadeInUp 0.3s ease-out'
-                }}>
+                <div className="chatbot-popup">
                     {/* Header */}
                     <div style={{
                         padding: '16px',
@@ -243,6 +228,32 @@ const Chatbot = () => {
             )}
             <style>
                 {`
+                .chatbot-popup {
+                    position: fixed;
+                    bottom: 100px;
+                    right: 30px;
+                    width: 380px;
+                    height: 500px;
+                    background-color: white;
+                    border-radius: 16px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    z-index: 1000;
+                    overflow: hidden;
+                    border: 1px solid hsl(0 0% 90%);
+                    animation: fadeInUp 0.3s ease-out;
+                }
+
+                @media (max-width: 480px) {
+                    .chatbot-popup {
+                        width: calc(100vw - 40px);
+                        right: 20px;
+                        bottom: 100px;
+                        height: 60vh;
+                    }
+                }
+
                 @keyframes fadeInUp {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }

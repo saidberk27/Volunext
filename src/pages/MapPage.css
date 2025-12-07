@@ -1,5 +1,12 @@
 /* --- GENEL AYARLAR (AÇIK TEMA) --- */
 
+.map-page-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 #cesiumContainer {
     width: 100%;
     height: 100vh;
@@ -428,27 +435,38 @@
 @media (max-width: 768px) {
 
     /* Mobile Layout Overrides */
+    .map-page-wrapper {
+        padding: 10px;
+        background-color: #f3f4f6;
+        /* Hafif gri arka plan */
+        overflow-y: auto;
+        /* Scroll imkanı */
+        height: auto;
+        min-height: 100dvh;
+        box-sizing: border-box;
+    }
+
     #cesiumContainer {
-        height: 100dvh;
-        /* Dynamic viewport height for mobile browsers */
+        height: 80vh;
+        /* Ekrana sığmyan biraz daha küçük */
+        width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
     }
 
     .telemetry-panel {
         top: 10px !important;
-        /* Top left, below navbar */
         left: 10px !important;
         right: auto !important;
         bottom: auto !important;
         min-width: unset !important;
         width: calc(100% - 20px);
-        /* Full width minus padding */
         max-width: 300px;
-        /* Cap width */
         max-height: 40vh;
         overflow-y: auto;
         border-radius: 12px;
         background: rgba(255, 255, 255, 0.95);
-        /* Slightly transparent */
     }
 
     .telemetry-panel h2 {
@@ -460,7 +478,6 @@
         padding: 12px 15px;
     }
 
-    /* Hide connection status text on mobile, just show dot if needed, or position absolutely top right */
     .connection-status {
         top: 10px !important;
         right: 10px !important;
