@@ -41,7 +41,7 @@ const HomePage = () => {
             <Slider />
 
             {posts.map(post => (
-                <div key={post.id} className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div key={post.id} className="card" style={{ padding: '0', overflow: 'hidden', border: 'none', borderRadius: '0' }}>
                     <div style={{ padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <img src={post.avatar} alt={post.author} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />

@@ -423,3 +423,78 @@
         transform: scale(1);
     }
 }
+
+/* --- MOBILE RESPONSIVENESS FOR MAP --- */
+@media (max-width: 768px) {
+
+    /* Mobile Layout Overrides */
+    #cesiumContainer {
+        height: 100dvh;
+        /* Dynamic viewport height for mobile browsers */
+    }
+
+    .telemetry-panel {
+        top: 10px !important;
+        /* Top left, below navbar */
+        left: 10px !important;
+        right: auto !important;
+        bottom: auto !important;
+        min-width: unset !important;
+        width: calc(100% - 20px);
+        /* Full width minus padding */
+        max-width: 300px;
+        /* Cap width */
+        max-height: 40vh;
+        overflow-y: auto;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.95);
+        /* Slightly transparent */
+    }
+
+    .telemetry-panel h2 {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+
+    .telemetry-content {
+        padding: 12px 15px;
+    }
+
+    /* Hide connection status text on mobile, just show dot if needed, or position absolutely top right */
+    .connection-status {
+        top: 10px !important;
+        right: 10px !important;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .control-panel {
+        width: 100%;
+        bottom: 20px !important;
+        left: 0 !important;
+        transform: none !important;
+        padding: 0 15px;
+        gap: 8px;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .control-btn {
+        padding: 12px 16px;
+        font-size: 13px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Modal Adjustments */
+    .modal-content {
+        min-width: 90% !important;
+        width: 90% !important;
+        padding: 20px !important;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+}

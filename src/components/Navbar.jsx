@@ -1,7 +1,7 @@
 import React from 'react';
-import { Bell, BellPlusIcon, LucideBellDot, MessageSquare, MessageSquareDotIcon, User } from 'lucide-react';
+import { Bell, BellPlusIcon, LucideBellDot, MessageSquare, MessageSquareDotIcon, User, Menu } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
     return (
         <nav style={{
             height: '70px',
@@ -13,34 +13,40 @@ const Navbar = () => {
             zIndex: 100,
             display: 'flex',
             alignItems: 'center',
-            padding: '0 2rem',
+            padding: '0 1rem', // Reduced padding for mobile
             justifyContent: 'space-between'
         }}>
-            <div style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                background: 'linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary-dark)))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-            }}>
-                <a href="/app/home">
-                    <img
-                        src="/src/assets/side-logo.png"
-                        alt="Kuruluş Resim"
-                        style={{
-                            width: '240px',
-                            height: '240px',
-                            objectFit: 'contain',
-                            display: 'block'
-                        }}
-                        onError={(e) => {
-                            e.target.style.display = 'none';
-                        }}
-                    />
-                </a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <button className="mobile-only" onClick={onMenuClick} style={{ color: 'hsl(var(--text-main))' }}>
+                    <Menu size={24} />
+                </button>
+                <div style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    background: 'linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary-dark)))',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                }}>
+                    <a href="/app/home">
+                        <img
+                            src="/src/assets/side-logo.png"
+                            alt="Kuruluş Resim"
+                            style={{
+                                width: '240px',
+                                height: '240px',
+                                objectFit: 'contain',
+                                display: 'block'
+                            }}
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                            }}
+                        />
+                    </a>
+                </div>
+
             </div>
 
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <div className="desktop-only" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 <button style={{ color: 'hsl(var(--text-muted))' }}>
                     <LucideBellDot size={26} />
                 </button>
@@ -62,7 +68,8 @@ const Navbar = () => {
                     </button>
                 </div>
             </div>
-        </nav>
+
+        </nav >
     );
 };
 

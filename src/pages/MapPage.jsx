@@ -306,13 +306,12 @@ const MapPage = () => {
             },
             label: {
                 text: project.name,
-                font: 'bold 15px sans-serif',
-                fillColor: Cesium.Color.WHITE,
-                outlineColor: Cesium.Color.BLACK,
-                outlineWidth: 3,
-                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                font: 'bold 18px sans-serif',
+                fillColor: Cesium.Color.BLACK,
+                style: Cesium.LabelStyle.FILL,
+                showBackground: false,
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                pixelOffset: new Cesium.Cartesian2(0, -30),
+                pixelOffset: new Cesium.Cartesian2(0, -25),
                 disableDepthTestDistance: Number.POSITIVE_INFINITY
             },
             properties: {
@@ -343,11 +342,10 @@ const MapPage = () => {
             },
             label: {
                 text: 'Konumunuz',
-                font: 'bold 13px sans-serif',
-                fillColor: Cesium.Color.WHITE,
-                outlineColor: Cesium.Color.BLACK,
-                outlineWidth: 2,
-                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                font: 'bold 18px sans-serif',
+                fillColor: Cesium.Color.BLACK,
+                style: Cesium.LabelStyle.FILL,
+                showBackground: false,
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset: new Cesium.Cartesian2(0, -25),
                 disableDepthTestDistance: Number.POSITIVE_INFINITY
@@ -479,7 +477,7 @@ const MapPage = () => {
     };
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
             <div id="cesiumContainer" ref={cesiumContainerRef} />
 
             {/* Details Panel */}

@@ -53,7 +53,7 @@ const OrganizationProfile = () => {
                 <div>
                     <h1 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>IYACA - Uluslararası Gençlik Aktiviteleri Merkezi Derneği</h1>
                     <p style={{ color: 'hsl(var(--text-muted))', marginBottom: '1rem' }}>Sivil Toplum Kuruluşu | Ankara, Türkiye</p>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <div className="profile-badges">
                         <span className="btn" style={{ fontSize: '0.8rem', padding: '0.5rem 1rem', background: 'hsl(var(--accent) / 0.1)', color: 'hsl(var(--primary))' }}>
                             <Users size={16} style={{ marginRight: '0.5rem' }} /> 40000+ Gönüllü
                         </span>

@@ -207,7 +207,8 @@ const AlgorithmsPage = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)', gap: '2rem', alignItems: 'start' }}>
+            {/* How it Works & Formula Container - Responsive Grid */}
+            <div className="algorithms-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)', gap: '2rem', alignItems: 'start' }}>
 
                 {/* How it works - Interactive */}
                 <div>

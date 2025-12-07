@@ -82,6 +82,7 @@ const Chatbot = () => {
         <>
             {/* Floating Action Button */}
             <button
+                className="chatbot-container"
                 onClick={() => setIsOpen(!isOpen)}
                 style={{
                     position: 'fixed',

@@ -1,10 +1,8 @@
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Map as MapIcon, User, Trophy, Cpu } from 'lucide-react';
+import { Home, Map as MapIcon, User, Trophy, Cpu, X } from 'lucide-react';
 
 const getLinkStyle = (name) => ({ isActive }) => {
-
-    console.log(`[${name}] isActive: ${isActive}`);
-
     return ({
         display: 'flex',
         alignItems: 'center',
@@ -21,49 +19,76 @@ const getLinkStyle = (name) => ({ isActive }) => {
     });
 };
 
-// ---
+const Sidebar = ({ isOpen, onClose, isDesktop }) => {
+    // Determine class based on desktop/mobile state
+    // On Desktop: Static (no 'sidebar-drawer' class which hides it)
+    // On Mobile: 'sidebar-drawer' class + 'open' based on state
+    const sidebarClass = isDesktop ? '' : `sidebar-drawer ${isOpen ? 'open' : ''}`;
 
-const Sidebar = () => {
     return (
-        <aside style={{
-            width: '280px',
-            borderRight: '1px solid hsl(var(--border))',
-            backgroundColor: 'hsl(var(--bg-dark))',
-            padding: '2rem 1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'calc(100vh - 70px)', // Minus navbar height
-            position: 'sticky',
-            top: '100px',
-            zIndex: 90,
-            overflowY: 'auto'
-        }}>
+        <>
+            {/* Mobile Overlay */}
+            {!isDesktop && (
+                <div
+                    className={`sidebar-overlay ${isOpen ? 'open' : ''} mobile-only`}
+                    onClick={onClose}
+                />
+            )}
 
-            <NavLink to="/app/home" style={getLinkStyle('Ana Sayfa')} end>
-                <Home size={22} />
-                <span>Ana Sayfa</span>
-            </NavLink>
+            <aside
+                className={sidebarClass}
+                style={{
+                    width: '280px',
+                    borderRight: isDesktop ? '1px solid hsl(var(--border))' : 'none',
+                    backgroundColor: 'hsl(var(--bg-dark))',
+                    padding: '2rem 1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: isDesktop ? 'calc(100vh - 70px)' : '100vh',
+                    position: isDesktop ? 'sticky' : 'fixed',
+                    top: isDesktop ? '70px' : '0',
+                    left: 0,
+                    zIndex: 90,
+                    overflowY: 'auto'
+                }}
+            >
+                {/* Mobile Close Button */}
+                {!isDesktop && (
+                    <div className="mobile-only" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                        <button onClick={onClose} style={{ color: 'hsl(var(--text-muted))' }}>
+                            <X size={24} />
+                        </button>
+                    </div>
+                )}
 
-            <NavLink to="/app/profile" style={getLinkStyle('Profil')}>
-                <User size={22} />
-                <span>Profil</span>
-            </NavLink>
+                <NavLink to="/app/home" style={getLinkStyle('Ana Sayfa')} onClick={!isDesktop ? onClose : undefined} end>
+                    <Home size={22} />
+                    <span>Ana Sayfa</span>
+                </NavLink>
 
-            <NavLink to="/app/map" style={getLinkStyle('Harita')}>
-                <MapIcon size={22} />
-                <span>Harita</span>
-            </NavLink>
+                <NavLink to="/app/profile" style={getLinkStyle('Profil')} onClick={!isDesktop ? onClose : undefined}>
+                    <User size={22} />
+                    <span>Profil</span>
+                </NavLink>
 
-            <NavLink to="/app/leaderboard" style={getLinkStyle('Lider Tahtası')}>
-                <Trophy size={22} />
-                <span>Lider Tahtası</span>
-            </NavLink>
+                <NavLink to="/app/map" style={getLinkStyle('Harita')} onClick={!isDesktop ? onClose : undefined}>
+                    <MapIcon size={22} />
+                    <span>Harita</span>
+                </NavLink>
 
-            <NavLink to="/app/algorithms" style={getLinkStyle('Algoritmalarımız')}>
-                <Cpu size={22} />
-                <span>Algoritmalarımız</span>
-            </NavLink>
-        </aside>
+                <NavLink to="/app/leaderboard" style={getLinkStyle('Lider Tahtası')} onClick={!isDesktop ? onClose : undefined}>
+                    <Trophy size={22} />
+                    <span>Lider Tahtası</span>
+                </NavLink>
+
+                <NavLink to="/app/algorithms" style={getLinkStyle('Algoritmalarımız')} onClick={!isDesktop ? onClose : undefined}>
+                    <Cpu size={22} />
+                    <span>Algoritmalarımız</span>
+                </NavLink>
+            </aside>
+
+            {/* Duplicate media query removed as we use JS prop now, relying on index.css mobile-only helpers if needed */}
+        </>
     );
 };
 

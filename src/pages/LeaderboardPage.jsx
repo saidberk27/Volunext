@@ -147,13 +147,14 @@ const LeaderboardPage = () => {
             </div>
 
             {/* Top 3 Podium */}
-            <div style={{
+            <div className="podium-container" style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'flex-end',
                 gap: '2rem',
                 marginBottom: '4rem',
-                marginTop: '2rem'
+                marginTop: '3rem',
+                paddingTop: '2rem'
             }}>
                 {/* 2nd Place */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

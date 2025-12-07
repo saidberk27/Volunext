@@ -45,7 +45,7 @@ const VolunteerProfile = () => {
             {/* Impact Stats */}
             <div style={{ marginTop: '3rem' }}>
                 <h3 style={{ marginBottom: '1.5rem' }}>Etki Raporu</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+                <div className="impact-stats-grid">
                     {/* Water */}
                     <div style={{
                         background: 'linear-gradient(135deg, hsl(200, 80%, 95%), hsl(200, 80%, 90%))',
